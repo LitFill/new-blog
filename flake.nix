@@ -10,10 +10,10 @@
     let
       inherit (nixpkgs) lib;
 
+      # nixpkgs 26.11 no longer supports x86_64-darwin
       systems = [
         "x86_64-linux"
         "aarch64-linux"
-        "x86_64-darwin"
         "aarch64-darwin"
       ];
 
@@ -54,6 +54,6 @@
         }
       );
 
-      formatter = eachSystem (pkgs: _system: pkgs.nixfmt);
+      formatter = eachSystem (pkgs: _system: pkgs.nixfmt-tree);
     };
 }
