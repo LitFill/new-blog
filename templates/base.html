@@ -2,7 +2,12 @@
 <html lang="{{ config.default_language | default(value="en") }}">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="light-dark(#ffffff, #202b38)" />
     <title>{% block title %}{{ config.title }}{% endblock title %}</title>
     <meta
       name="description"

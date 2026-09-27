@@ -3,6 +3,18 @@
 :root {
   --links: #2b5fd9;
   --code-background: #f6f8fa;
+
+  /* water.css only flips its own variables under prefers-color-scheme.
+     Declaring the scheme here lets light-dark() and the theme-color meta
+     follow the reader's system setting as well, still with no javascript. */
+  color-scheme: light dark;
+
+  /* Most readers arrive on a phone, so the type is sized to stay legible at
+     320px and then settles instead of growing forever on a wide display. */
+  --body-size: clamp(1.0625rem, 1rem + 0.25vw, 1.125rem);
+  /* code now wraps instead of scrolling, so it can afford to be larger than
+     the 13px the browser default gives a bare <pre> */
+  --code-size: clamp(0.875rem, 0.83rem + 0.2vw, 0.9375rem);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -12,18 +24,95 @@
   }
 }
 
-header nav a + a {
-  margin-left: 1rem;
+body {
+  font-size: var(--body-size);
+  line-height: 1.6;
+  /* water.css runs a ~95 character measure, which is tiring to read and
+     worse once a phone narrows it. Pull the column in to a readable width. */
+  max-width: 42rem;
+  padding-left: max(1rem, env(safe-area-inset-left));
+  padding-right: max(1rem, env(safe-area-inset-right));
+  /* iOS inflates text in landscape unless told otherwise, which wrecks both
+     the measure and the alignment inside code blocks. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.2;
+  /* a long title wraps, it does not push the page sideways */
+  overflow-wrap: break-word;
+}
+
+h1 {
+  font-size: clamp(1.75rem, 1.4rem + 1.6vw, 2.5rem);
+}
+
+h2 {
+  margin-top: 2.25rem;
+  font-size: clamp(1.375rem, 1.25rem + 0.6vw, 1.625rem);
+}
+
+h3 {
+  margin-top: 1.75rem;
+}
+
+main > * + * {
+  margin-top: 1.15rem;
+}
+
+:where(a, summary, button):focus-visible {
+  outline: 2px solid var(--links);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Code ------------------------------------------------------------------ */
+
+pre > code {
+  /* A Haskell type signature is one long run of unbreakable characters. In a
+     360px block a horizontal scrollbar hides most of the snippet and the
+     reader never learns what is off screen, so wrap it and mark the wrap
+     points with the hanging indent below. */
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  font-size: var(--code-size);
+  line-height: 1.55;
+  padding: 0.75rem 0.875rem;
+  border-radius: 6px;
+  tab-size: 2;
+}
+
+/* Giallo puts every source line in its own span and separates them with a
+   real newline, so the span has to stay inline-block: making it a block would
+   add a second line break and double every gap. The negative text-indent
+   holds the line flush while its wrapped tail stays indented, so a soft wrap
+   is never mistaken for a new statement. */
+pre > code > .giallo-l {
+  display: inline-block;
+  box-sizing: border-box;
+  width: 100%;
+  padding-left: 2ch;
+  text-indent: -2ch;
+  min-height: 1lh;
+}
+
+/* An inline chip that wrapped mid-token used to break into fragments with
+   separate backgrounds. clone repeats the box on every fragment so a split
+   chip still reads as one unit. */
+code {
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  overflow-wrap: break-word;
+  font-size: 0.9em;
 }
 
 main .meta {
   margin-top: -0.5rem;
-  color: var(--muted);
-}
-
-.post-list {
-  list-style: none;
-  padding-left: 0;
+  color: var(--text-muted);
 }
 
 /* water.css draws every <time> as a code chip; post metadata is plain text */
@@ -33,29 +122,53 @@ time {
   border-radius: 0;
 }
 
+/* Post list ------------------------------------------------------------- */
+
+.post-list {
+  list-style: none;
+  padding-left: 0;
+  margin-left: 0;
+}
+
 .post-list li {
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.25rem;
+}
+
+/* the row is a single link, so the whole entry is worth pressing */
+.post-entry {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.85rem 0.6rem;
+  margin: 0 -0.6rem;
+  border-radius: 8px;
+  color: inherit;
+}
+
+.post-entry:hover {
+  background: var(--background-alt);
+  text-decoration: none;
+}
+
+.post-title {
+  font-weight: 600;
+  color: var(--links);
 }
 
 .post-list time {
-  display: block;
-  color: var(--muted);
-  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
 }
 
-/* Giallo (zola syntax highlighting) line gutters */
-.giallo-l {
-  display: inline-block;
-  min-height: 1lh;
-  width: 100%;
+.post-description {
+  color: var(--text-muted);
 }
 
-.giallo-ln {
-  display: inline-block;
-  user-select: none;
-  margin-right: 0.4em;
-  padding: 0.4em;
-  min-width: 3ch;
-  text-align: right;
-  opacity: 0.8;
+/* Touch targets --------------------------------------------------------- */
+
+/* Links inside running prose fall under the WCAG exception for inline links,
+   so only the standalone controls get the full 44px. */
+header nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
 }
