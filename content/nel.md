@@ -1,5 +1,5 @@
 +++
-title = "Porting NonEmpty to Koka with Nix"
+title = "Porting NonEmpty to Koka feat. Nix"
 date = 2026-09-27
 description = "Porting Haskell NonEmpty into Koka, then shipping it as a nix flake library so other projects can just depend on it."
 +++
@@ -19,7 +19,7 @@ thought I needed to port it to Koka. Koka has
 want to use something like opt-applicative.
 
 While porting the first file, OptEnvConf/Args.hs, I found it uses
-Data.List.NonEmpty a lot. I was using normal list\<a> but it became difficult to
+Data.List.NonEmpty a lot. I was using normal `list<a>` but it became difficult to
 keep the semantics. So I proceeded to port NonEmpty first.
 
 Koka also doesn't have an official package manager yet. So I decided to use nix
@@ -181,7 +181,7 @@ appending it to the tail of the first argument. We also add `list/append` for
 when the second argument is already a list.
 
 Concatenation makes the head of the head be the head of the returned nonempty
-list, and converts rest into list of lists then concatenates them.
+list, and converts the rest into a list of lists then concatenates them.
 
 Next we define `map` of type `forall<a, b, e> (:nonempty<a>, :(a) -> e b) -> e nonempty<b>`.
 
@@ -240,7 +240,7 @@ pub fun last(ne : nonempty<a>) : a
 
 The `length` function always returns at least `1`.
 
-The `last` function first applies `list/last` to the tail, it returns
+The `last` function first applies `list/last` to the tail, which returns
 `maybe<a>`; `maybe/default` then supplies the default value in case of
 `Nothing`. The type of `maybe/default` is `forall<a> (:maybe<a>, :a) -> a`.
 
@@ -254,9 +254,9 @@ pub fun minimum(ne : nonempty<a>, ?cmp : (a, a) -> e order) : e a
   ne.sort.head
 ```
 
-Koka allows implicit parameters like `?cmp` there. Think of it like the Haskell
+Koka allows implicit parameter like `?cmp` there. Think of it like the Haskell
 constraint `Ord a`.
-So for something like `show` function, the type would be
+So for something like a `show` function, the type would be
 `fun list/show(xs : list<a>, ?show : a -> e string) : e string`,
 roughly equal to Haskell `Show a => [a] -> String`.
 
@@ -433,7 +433,9 @@ single-module-style library.
 ## Result
 
 Now we have a port of the NonEmpty list library and a way to use it either via nix
-or as single-module library.
+or as a single-module library.
+
+The repo is at [LitFill/nel-kk](https://github.com/LitFill/nel-kk).
 
 We use it as a normal import:
 

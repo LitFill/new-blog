@@ -1,7 +1,8 @@
-# Change this to wherever the site is published, e.g. https://user.github.io/blog
-base_url = "https://litfill.github.io/blog"
-title = "LitFill"
-description = "Technical write ups on Koka, nix, and whatever I break along the way."
+# Published at the apex of a custom domain, so there is no path prefix and
+# the rendered files sit at the root of the deploy branch.
+base_url = "https://blog.rozy.my.id"
+title = "LitFill's"
+description = "Technical notes on Koka, Nix, and the incidental failures encountered along the way."
 default_language = "en"
 generate_feeds = true
 

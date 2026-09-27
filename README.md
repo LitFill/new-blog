@@ -13,7 +13,8 @@ build time.
 | `config.toml`     | title, `base_url`, atom feed, syntax highlighting theme |
 | `content/`        | one markdown file per post                             |
 | `templates/`      | `base.html`, `index.html` (home), `page.html` (post)   |
-| `static/`         | copied verbatim, currently just `style.css`            |
+| `static/`         | copied verbatim: `style.css` and the Pages `CNAME`      |
+| `.github/`        | `deploy.yml`, builds and publishes the site on push     |
 
 ## Commands
 
@@ -44,14 +45,30 @@ Posts are ordered newest first, and the home page lists them automatically.
 
 ## Publishing
 
-`nix build` leaves the site in `./result`: plain files, no server side anything.
-Copy them wherever you host it.
+`deploy` is the branch that goes live. Push to it and the workflow builds the
+site with the same nix derivation as `nix build`, then hands it to GitHub Pages.
+`main` is the scratch branch and is never served.
+
+```console
+$ git switch deploy
+$ nix run .        # preview at http://localhost:1111 first
+$ git push origin deploy
+```
+
+The site is published at <https://blog.rozy.my.id>. Two settings have to agree
+for that to work: `base_url` in `config.toml` and the Pages custom domain for
+this repository. Change one, change the other. `static/CNAME` carries the same
+name into the build output.
+
+`base_url` is what every generated URL derives from, so it has to be the real
+address: the feed, the sitemap, and the links between pages all read from it.
+`nix run .` overrides it with `http://localhost:1111`, so local previews keep
+working without being edited first.
+
+For a host other than Pages, `nix build` still leaves the rendered files in
+`./result` and nothing server side:
 
 ```console
 $ nix build
 $ cp -r result/* /var/www/blog/
 ```
-
-Set `base_url` in `config.toml` to the real URL first. The feed, the sitemap, and
-the links between pages are all derived from it; `nix run .` overrides it with
-`http://localhost:1111` so local previews work unchanged.

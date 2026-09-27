@@ -1,0 +1,58 @@
+name: deploy
+
+# The deploy branch is the source of truth for the published site. main stays
+# as the scratch branch; anything meant to go live lands on deploy first.
+on:
+  push:
+    branches: [deploy]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# GitHub Pages serves one deployment at a time, so a newer push should
+# supersede an in-flight run rather than race it.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Nix reads the flake from the git tree, so a shallow clone would make it
+      # guess at the source. One commit of history is enough.
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+
+      # The same derivation `nix build` produces locally, so what gets
+      # published cannot drift from what the flake yields anywhere else.
+      - name: Build site
+        run: |
+          nix build .#blog
+          # result is a symlink into /nix/store; resolve it into a real
+          # directory so the upload sees files, not a dangling link.
+          cp -rL result/ _site
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
