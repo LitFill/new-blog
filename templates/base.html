@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="{{ config.default_language | default(value="en") }}">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}{{ config.title }}{% endblock title %}</title>
+    <meta
+      name="description"
+      content="{% block description %}{{ config.description }}{% endblock description %}"
+    />
+    <link
+      rel="alternate"
+      type="application/atom+xml"
+      title="{{ config.title }}"
+      href="{{ get_url(path='atom.xml') }}"
+    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css" />
+    <link rel="stylesheet" href="{{ get_url(path='style.css') }}" />
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="{{ get_url(path='/') }}">{{ config.title }}</a>
+      </nav>
+    </header>
+    <main>
+      {% block content %}{% endblock content %}
+    </main>
+    <footer>
+      <p>{{ config.description }}</p>
+    </footer>
+  </body>
+</html>

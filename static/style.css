@@ -1,0 +1,61 @@
+/* Tweaks on top of water.css */
+
+:root {
+  --links: #2b5fd9;
+  --code-background: #f6f8fa;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --links: #7aa7ff;
+    --code-background: #161b22;
+  }
+}
+
+header nav a + a {
+  margin-left: 1rem;
+}
+
+main .meta {
+  margin-top: -0.5rem;
+  color: var(--muted);
+}
+
+.post-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+/* water.css draws every <time> as a code chip; post metadata is plain text */
+time {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+}
+
+.post-list li {
+  margin-bottom: 1.5rem;
+}
+
+.post-list time {
+  display: block;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* Giallo (zola syntax highlighting) line gutters */
+.giallo-l {
+  display: inline-block;
+  min-height: 1lh;
+  width: 100%;
+}
+
+.giallo-ln {
+  display: inline-block;
+  user-select: none;
+  margin-right: 0.4em;
+  padding: 0.4em;
+  min-width: 3ch;
+  text-align: right;
+  opacity: 0.8;
+}

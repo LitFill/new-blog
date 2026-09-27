@@ -1,0 +1,12 @@
+# Change this to wherever the site is published, e.g. https://user.github.io/blog
+base_url = "https://litfill.github.io/blog"
+title = "LitFill"
+description = "Technical write ups on Koka, nix, and whatever I break along the way."
+default_language = "en"
+generate_feeds = true
+
+# Giallo highlights code at build time and emits light-dark() colors, so the
+# theme follows the reader's system setting with no javascript involved.
+[markdown.highlighting]
+light_theme = "github-light"
+dark_theme = "github-dark"
