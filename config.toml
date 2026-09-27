@@ -6,8 +6,13 @@ description = "Technical notes on Koka, Nix, and the incidental failures encount
 default_language = "en"
 generate_feeds = true
 
-# Giallo highlights code at build time and emits light-dark() colors, so the
-# theme follows the reader's system setting with no javascript involved.
+# Zola ships no Koka grammar, so the syntax and the themes that colour it live
+# in the repository and are handed to giallo here. Giallo highlights code at
+# build time and emits light-dark() colors, so the theme follows the reader's
+# system setting with no javascript involved.
 [markdown.highlighting]
-light_theme = "github-light"
-dark_theme = "github-dark"
+light_theme = "koka-light"
+dark_theme = "koka-dark"
+extra_grammars = ["syntaxes/koka.sublime-syntax"]
+extra_themes = ["syntaxes/koka-light.tmTheme", "syntaxes/koka-dark.tmTheme"]
+

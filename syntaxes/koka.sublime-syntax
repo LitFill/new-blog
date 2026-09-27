@@ -1,0 +1,286 @@
+{
+  "displayName": "Koka",
+  "fileTypes": [
+    "kk",
+    "koka"
+  ],
+  "name": "koka",
+  "scopeName": "source.koka",
+  "patterns": [
+    {
+      "include": "#comment"
+    },
+    {
+      "include": "#string"
+    },
+    {
+      "include": "#number"
+    },
+    {
+      "include": "#function-declaration"
+    },
+    {
+      "include": "#keyword"
+    },
+    {
+      "include": "#module-path"
+    },
+    {
+      "include": "#constructor"
+    },
+    {
+      "include": "#type-annotation"
+    },
+    {
+      "include": "#operator"
+    },
+    {
+      "include": "#punctuation"
+    },
+    {
+      "include": "#identifier"
+    }
+  ],
+  "repository": {
+    "comment": {
+      "patterns": [
+        {
+          "name": "comment.line.double-slash.koka",
+          "begin": "//",
+          "end": "$"
+        },
+        {
+          "name": "comment.block.koka",
+          "begin": "/\\*",
+          "end": "\\*/"
+        }
+      ]
+    },
+    "string": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.koka",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.koka",
+              "match": "\\\\."
+            }
+          ]
+        }
+      ]
+    },
+    "number": {
+      "patterns": [
+        {
+          "name": "constant.numeric.hex.koka",
+          "match": "\\b0[xX][0-9A-Fa-f_]+"
+        },
+        {
+          "name": "constant.numeric.binary.koka",
+          "match": "\\b0[bB][01_]+"
+        },
+        {
+          "name": "constant.numeric.octal.koka",
+          "match": "\\b0[oO][0-7_]+"
+        },
+        {
+          "name": "constant.numeric.float.koka",
+          "match": "\\b[0-9][0-9_]*\\.[0-9_]+([eE][+-]?[0-9_]+)?"
+        },
+        {
+          "name": "constant.numeric.decimal.koka",
+          "match": "\\b[0-9][0-9_]*([eE][+-]?[0-9_]+)?"
+        }
+      ]
+    },
+    "function-declaration": {
+      "patterns": [
+        {
+          "match": "\\b(fun)(\\s+)([A-Za-z_][A-Za-z0-9_]*(?:/[A-Za-z0-9_]+)*)",
+          "captures": {
+            "1": {
+              "name": "keyword.function.koka"
+            },
+            "3": {
+              "name": "entity.name.function.koka"
+            }
+          }
+        },
+        {
+          "match": "\\b(infixl|infixr|infix)(\\s+)([0-9]+)",
+          "captures": {
+            "1": {
+              "name": "keyword.control.koka"
+            },
+            "3": {
+              "name": "constant.numeric.decimal.koka"
+            }
+          }
+        },
+        {
+          "match": "\\b(struct|type|alias|effect)(\\s+)([A-Za-z_][A-Za-z0-9_]*)",
+          "captures": {
+            "1": {
+              "name": "storage.type.koka"
+            },
+            "3": {
+              "name": "entity.name.type.koka"
+            }
+          }
+        }
+      ]
+    },
+    "keyword": {
+      "patterns": [
+        {
+          "name": "keyword.function.koka",
+          "match": "\\b(con|ctl|fn|fun)\\b"
+        },
+        {
+          "name": "keyword.control.conditional.koka",
+          "match": "\\b(elif|else|if|match|then)\\b"
+        },
+        {
+          "name": "keyword.control.koka",
+          "match": "\\b(handle|handler|with|as)\\b"
+        },
+        {
+          "name": "keyword.control.koka",
+          "match": "\\b(infixl|infixr|infix|forall|mask|pub|some|behindmod)\\b"
+        },
+        {
+          "name": "keyword.import.koka",
+          "match": "\\b(import|module)\\b"
+        },
+        {
+          "name": "storage.type.koka",
+          "match": "\\b(alias|effect|struct|type|val|var)\\b"
+        },
+        {
+          "name": "storage.modifier.koka",
+          "match": "\\b(abstract|extern|final|named|override|tailmod|fip|fbip|inline)\\b"
+        },
+        {
+          "name": "keyword.control.return.koka",
+          "match": "\\breturn\\b"
+        },
+        {
+          "name": "support.function.koka",
+          "match": "\\b(initially|finally)\\b"
+        }
+      ]
+    },
+    "module-path": {
+      "patterns": [
+        {
+          "name": "support.module.koka",
+          "match": "\\b[a-z][a-zA-Z0-9_]*(?:/[A-Za-z0-9_]+)+"
+        }
+      ]
+    },
+    "constructor": {
+      "patterns": [
+        {
+          "name": "entity.name.type.constructor.koka",
+          "match": "\\b[A-Z][A-Za-z0-9_]*"
+        }
+      ]
+    },
+    "type-annotation": {
+      "patterns": [
+        {
+          "name": "meta.type.koka",
+          "begin": ":(?!:)",
+          "end": "(?==)|(?=\\))|(?=[{}])|$",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.separator.koka"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#type-expression"
+            }
+          ]
+        }
+      ]
+    },
+    "type-expression": {
+      "patterns": [
+        {
+          "name": "entity.name.type.tpp.koka",
+          "match": "\\b[a-z](?![A-Za-z0-9_])"
+        },
+        {
+          "name": "entity.name.type.koka",
+          "match": "\\b[A-Za-z][A-Za-z0-9_]*"
+        },
+        {
+          "name": "keyword.operator.koka",
+          "match": "\\?"
+        },
+        {
+          "begin": "\\(",
+          "end": "\\)",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.separator.koka"
+            }
+          },
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.separator.koka"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#type-expression"
+            }
+          ]
+        },
+        {
+          "name": "punctuation.separator.koka",
+          "match": "<|>|,|\\."
+        }
+      ]
+    },
+    "operator": {
+      "patterns": [
+        {
+          "name": "keyword.operator.arrow.koka",
+          "match": "->|<-"
+        },
+        {
+          "name": "keyword.operator.koka",
+          "match": "<::|\\+\\+|\\*\\*|:=|==|!|~=|\\+|-|\\*|/|%|<<|>>|<|>|\\?|="
+        }
+      ]
+    },
+    "punctuation": {
+      "patterns": [
+        {
+          "name": "punctuation.separator.koka",
+          "match": "\\||,|;|\\(|\\)|\\[|\\]|\\{|\\}"
+        },
+        {
+          "name": "punctuation.accessor.koka",
+          "match": "\\."
+        }
+      ]
+    },
+    "identifier": {
+      "patterns": [
+        {
+          "name": "variable.parameter.implicit.koka",
+          "match": "\\?[A-Za-z_][A-Za-z0-9_]*"
+        },
+        {
+          "name": "variable.other.koka",
+          "match": "[A-Za-z_][A-Za-z0-9_]*"
+        }
+      ]
+    }
+  }
+}
